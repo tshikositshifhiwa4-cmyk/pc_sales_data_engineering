@@ -2,7 +2,10 @@
   <img src="https://capsule-render.vercel.app/api?type=waving&color=1E90FF&height=200&section=header&text=PC%20Sales%20Data%20Engineering&fontSize=35&fontColor=ffffff"/>
 </p>
 
-> **Transforming a flat, messy 10,000-row PC sales dataset into a clean, queryable star schema data warehouse, built in SQL Server (SSMS) & compatible with  Snowflake.**
+> **An end-to-end data engineering project transforming a flat, messy 10,000-row 
+PC sales dataset into a clean, queryable star schema data warehouse. Covering 
+data cleaning, formatting, quality validation, and automated pipelines, built in 
+SQL Server (SSMS) & compatible with Snowflake.**
 
 ---
 ## Tech Stack
@@ -25,7 +28,7 @@
 ### Planning & Design
 
 <p>
-  <img src="https://img.shields.io/badge/Mind_Mapping_(Canvas)-FF6F61?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/Mind_Mapping_(Canva)-FF6F61?style=for-the-badge"/>
 </p>
 
 ### Project Status
@@ -61,10 +64,10 @@ pc-sales-data warehouse/
 │   └── 9.dim_date.sql
 │
 ├──  fact/
-│   └── sales_fact.sql
+│   └── pc_sales_fact.sql
 │
 ├──  validation/
-│   ├── JOINs_testing.sql
+│   ├── joins_testing.sql
 │   └── duplicate_testing.sql
 │
 └── README.md
@@ -196,7 +199,7 @@ pc-sales-data warehouse/
 
 ```sql
 -- Checking for duplicates on natural keys
-    --validating.sql
+    --duplicate_testing.sql
 ```
 
 **4. creating and loading the fact table**
@@ -277,12 +280,30 @@ The key technique was **incremental join testing**, adding one dimension at a ti
 
 ---
 
+## Future Improvements
+
+```mermaid id="h3k9dn"
+gantt
+    dateFormat  YYYY-MM-DD
+
+    section Data Preparation
+    Data Cleaning           :a1, 2026-04-14, 3d
+    Data Formatting         :a2, after a1, 3d
+
+    section Data Quality
+    Validation Rules        :a3, after a2, 3d
+
+    section Pipeline Development
+    Automation              :a4, after a3, 3d
+    Logging & Monitoring    :a5, after a4, 2d
+
+    section Optimisation
+    Performance Tuning      :a6, after a5, 2d
+```
+---
+
 <div align="center">
 
 **Built with patience, SQL, and a lot of row count checks** 
-
-![Made with SQL](https://img.shields.io/badge/Made%20with-SQL-blue?style=for-the-badge)
-![Data Warehouse](https://img.shields.io/badge/Type-Data%20Warehouse-purple?style=for-the-badge)
-![Star Schema](https://img.shields.io/badge/Schema-Star-FFD700?style=for-the-badge)
 
 </div>
