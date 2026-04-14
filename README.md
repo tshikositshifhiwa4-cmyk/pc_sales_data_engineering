@@ -76,10 +76,7 @@ pc-sales-data warehouse/
 
 ##  Architecture Overview
 
-```
 <img width="601" height="675" alt="Star_schema" src="https://github.com/user-attachments/assets/ddf5760a-e665-443c-9580-2b9759a1d635" />
-
-```
 
 ---
 
