@@ -189,7 +189,7 @@ pc-sales-data warehouse/
 
 **3. Validating dimension tables are clean**
 <p align="left">
-  <a href="./validating_tables/duplicate_testing.sql">
+  <a href="./validation/duplicate_testing.sql">
     <img src="https://img.shields.io/badge/View_Duplicate_Testing-228b22?style=for-the-badge">
   </a>
 </p>
