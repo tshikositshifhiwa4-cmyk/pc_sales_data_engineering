@@ -77,46 +77,8 @@ pc-sales-data warehouse/
 ##  Architecture Overview
 
 ```
-                            ┌─────────────────┐
-                            │   dim_customer  │
-                            │─────────────────│
-                            │ customer_id  PK │
-                            │ first_name      │
-                            │ last_name       │
-                            │ contact_number  │
-                            │ email_address   │
-                            └────────┬────────┘
-                                     │
-  ┌──────────────┐    ┌─────────────────────────────┐    ┌─────────────────┐
-  │ dim_product  │    │        sales_fact           │    │  dim_employee   │
-  │──────────────│    │─────────────────────────────│    │─────────────────│
-  │ product_id PK├────┤ sales_id          PK        ├────┤ employee_id  PK │
-  │ pc_make      │    │ customer_id       FK        │    │ employee_name   │
-  │ pc_model     │    │ employee_id       FK        │    │ department      │
-  │ storage_type │    │ product_id        FK        │    └─────────────────┘
-  │ storage_cap  │    │ store_id          FK        │
-  │ ram          │    │ payment_id        FK        │    ┌─────────────────┐
-  └──────────────┘    │ channel_id        FK        │    │   dim_store     │
-                      │ priority_id       FK        ├────┤─────────────────│
-┌────────────────┐    │ date_id           FK        │    │ store_id     PK │
-│ dim_location   │    │ location_id       FK        │    │ shop_name       │
-│────────────────│    │─────────────────────────────│    │ shop_age        │
-│ location_id PK ├────┤ sales_price                 │    └─────────────────┘
-│ continent      │    │ cost_price                  │
-│ country        │    │ discount_amount             │    ┌─────────────────┐
-│ province       │    │ finance_amount              ├────┤   dim_date      │
-└────────────────┘    │ cost_of_repairs             │    │─────────────────│
-                      │ total_sales_per_employee    │    │ date_id      PK │
-  ┌──────────────┐    │ pc_market_price             │    │ purchase_date   │
-  │ dim_payment  ├────┤ credit_score                │    │ ship_date       │
-  │──────────────│    └──────┬─────────────────┬────┘    │ year            │
-  │ payment_id PK│           │                 │         │ month           │
-  │ payment_meth │  ┌──────────────┐  ┌───────────────┐  └─────────────────┘
-  └──────────────┘  │ dim_channel  │  │dim_priority   │
-                    │──────────────│  │───────────────│
-                    │ channel_id PK│  │priority_id PK │
-                    │ channel      │  │priority       │
-                    └──────────────┘  └───────────────┘
+<img width="601" height="675" alt="Star_schema" src="https://github.com/user-attachments/assets/ddf5760a-e665-443c-9580-2b9759a1d635" />
+
 ```
 
 ---
