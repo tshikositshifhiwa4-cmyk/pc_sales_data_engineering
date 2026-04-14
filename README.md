@@ -234,7 +234,7 @@ SELECT COUNT(*) FROM sales_fact;
 
 The key technique was **incremental join testing**, adding one dimension at a time and checking row counts:
 <p align="left">
-  <a href="./validating_tables/join_testing.sql">
+  <a href="./validation/join_testing.sql">
     <img src="https://img.shields.io/badge/View_Join_Testing-006400?style=for-the-badge">
   </a>
 </p>
