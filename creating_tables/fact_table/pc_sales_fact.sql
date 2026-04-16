@@ -20,7 +20,8 @@ create table [pc_staging].[dbo].[pc_sales_fact](
 	[Cost_of_Repairs] decimal(10,2) NOT NULL,
 	[Total_Sales_per_Employee] decimal(10,2) NOT NULL,
 	[PC_Market_Price] decimal(10,2) NOT NULL,
-	[Credit_Score] decimal(10,2) NOT NULL
+	[Credit_Score] decimal(10,2) NOT NULL,
+	[load_date] datetime default getdate()
 )
 
 insert into [pc_staging].[dbo].[pc_sales_fact] (customer_id, employee_id, product_id, location_id,store_id,
