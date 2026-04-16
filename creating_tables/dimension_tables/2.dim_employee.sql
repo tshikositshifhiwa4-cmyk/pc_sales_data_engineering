@@ -10,5 +10,5 @@ insert into [pc_staging].[dbo].[dim_employee] (employee_name, department)
 select distinct Sales_Person_Name, Sales_Person_Department 
 from [pc_staging].[dbo].[pc_data];
 
-	--validating the insert
+	--validating the insert into table
 		select * from [pc_staging].[dbo].[dim_employee];
