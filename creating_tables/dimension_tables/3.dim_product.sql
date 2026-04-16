@@ -6,7 +6,8 @@ create table [pc_staging].[dbo].[dim_product](
 	[pc_model] [nvarchar](50) NOT NULL,
 	[storage_type] [nvarchar](50) NOT NULL,
 	[storage_capacity] [nvarchar](50) NOT NULL,
-	[ram] [nvarchar](50) NOT NULL
+	[ram] [nvarchar](50) NOT NULL,
+	[load_date] datetime default getdate()
 )
 insert into [pc_staging].[dbo].[dim_product] (pc_make, pc_model, storage_type, storage_capacity, ram)
 select distinct pc_make, pc_model, storage_type, storage_capacity, ram 
