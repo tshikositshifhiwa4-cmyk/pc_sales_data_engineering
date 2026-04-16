@@ -82,7 +82,7 @@ pc-sales-data warehouse/
 
 ##  Dimension Tables
 
-| Table | Primary Key | Natural Key(s) | Notes |
+| Table | Primary Key | Column (s) | Notes |
 |---|---|---|---|
 | `dim_customer` | `customer_id` | `email`, `first_name`, `last_name`, `contact` | Joined on all 4 columns to avoid fan-out |
 | `dim_employee` | `employee_id` | `employee_name`, `department` | Joined on all 2 columns to avoid |
@@ -157,7 +157,7 @@ pc-sales-data warehouse/
 </p>
 
 ```sql
--- Checking for duplicates on natural keys
+-- Checking for duplicates on columns
     --duplicate_testing.sql
 ```
 
@@ -182,13 +182,13 @@ SELECT COUNT(*) FROM sales_fact;
 
 ## Debugging Fan-Out: Lessons Learned
 
-> This project involved significant debugging of a classic star schema fan-out problem, going from 10k source rows to 487k fact rows before fixes.
+> This project involved significant debugging of a classic star schema fan-out problem, going from 10k source rows to over 500k fact rows before fixes.
 
 ### Root Causes Found
 
 | Issue | Outcome | Fix |
 |---|---|---|
-| `dim_customer` joined on email only | 10k → 487k rows in fact | Join on all 4 customer columns |
+| `dim_customer` joined on email only | 10k to over 500k rows in fact | Join on all 4 customer columns |
 | `dim_date` had NULL `ship_date` | Rows dropped silently | `COALESCE(ship_date, '9999-12-31')` |
 | Loose join conditions across dims | Duplicate fact rows | Join on ALL natural key columns |
 
