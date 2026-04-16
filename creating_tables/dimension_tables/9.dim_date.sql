@@ -5,7 +5,8 @@ create table [pc_staging].[dbo].[dim_date](
 	[purchase_date] [date] NOT NULL,
 	[ship_date] [date] NULL,
 	[year] int NOT NULL,
-	[month] int NOT NULL
+	[month] int NOT NULL,
+	[load_date] datetime default getdate()
 )
 insert into [pc_staging].[dbo].[dim_date] (purchase_date, ship_date, year, month)
 select distinct purchase_date, coalesce(try_cast(ship_date as date), '9999-12-31'), 
