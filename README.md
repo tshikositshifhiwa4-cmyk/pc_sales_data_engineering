@@ -43,13 +43,16 @@ SQL Server (SSMS) & compatible with Snowflake.**
 ```
 pc-sales-data warehouse/
 │
+├──  creating_databases/
+│   └──create_databases.csv
+│
 ├──  raw_files/
 │   └──pc_data.csv
 │   
 ├──  planning/
 │   └──plan_map.png
 │
-├──  Data Architecture/
+├──  Data_Architecture/
 │   └── star_schema.png
 │ 
 ├──  dimensions/
