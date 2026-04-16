@@ -20,7 +20,7 @@ create table [pc_staging].[dbo].[pc_sales_fact](
 	[Cost_of_Repairs] decimal(10,2) NOT NULL,
 	[Total_Sales_per_Employee] decimal(10,2) NOT NULL,
 	[PC_Market_Price] decimal(10,2) NOT NULL,
-	[Credit_Score] decimal(10,2) NOT NULL,
+	[Credit_Score] int NOT NULL,
 	[load_date] datetime default getdate()
 )
 
@@ -49,21 +49,21 @@ select
 	cast(st.cost_of_repairs as decimal(10,2)),
 	cast(st.total_sales_per_employee as decimal(10,2)),
 	cast(st.pc_market_price as decimal(10,2)),
-	st.credit_score
+	st.credit_score int
 
 
 from [pc_staging].[dbo].[pc_data] as st
 
 inner join [pc_staging].[dbo].[dim_customer] c
 	on st.customer_name = c.first_name
-	
+	and st.Customer_Surname = c.last_name
+	and st.Customer_Contact_Number = c.contact_number
+	and st.Customer_Email_Address = c.email_address
 
 inner join [pc_staging].[dbo].[dim_employee] e
 	on st.sales_person_name = e.employee_name
 	and st.Sales_Person_Department = e.department
-	and st.Customer_Surname = c.last_name
-	and st.Customer_Contact_Number = c.contact_number
-	and st.Customer_Email_Address = c.email_address
+
 
 inner join [pc_staging].[dbo]. [dim_product] p
 	on st.pc_model = p.pc_model
