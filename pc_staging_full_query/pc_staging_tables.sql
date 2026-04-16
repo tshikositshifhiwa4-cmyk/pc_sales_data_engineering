@@ -7,7 +7,8 @@ create table [pc_staging].[dbo].[dim_customer](
 	[first_name] [nvarchar](50) NOT NULL,
 	[last_name] [nvarchar](50) NOT NULL,
 	[contact_number] [nvarchar](50) NOT NULL,
-	[email_address] [nvarchar](50) NOT NULL
+	[email_address] [nvarchar](50) NOT NULL,
+	[load_date] datetime default getdate()
 )
 insert into [pc_staging].[dbo].[dim_customer] (first_name, last_name, contact_number, email_address )
 select distinct Customer_Name, Customer_Surname, Customer_Contact_Number, Customer_Email_Address
@@ -27,7 +28,8 @@ drop table [pc_staging].[dbo].[dim_employee]
 create table [pc_staging].[dbo].[dim_employee](
 	[employee_id] int identity(1,1) primary key,
 	[employee_name] [nvarchar](50) NOT NULL,
-	[department] [nvarchar](50) NOT NULL
+	[department] [nvarchar](50) NOT NULL,
+	[load_date] datetime default getdate()
 )
 insert into [pc_staging].[dbo].[dim_employee] (employee_name, department)
 select distinct Sales_Person_Name, Sales_Person_Department 
@@ -50,7 +52,8 @@ create table [pc_staging].[dbo].[dim_product](
 	[pc_model] [nvarchar](50) NOT NULL,
 	[storage_type] [nvarchar](50) NOT NULL,
 	[storage_capacity] [nvarchar](50) NOT NULL,
-	[ram] [nvarchar](50) NOT NULL
+	[ram] [nvarchar](50) NOT NULL,
+	[load_date] datetime default getdate()
 )
 insert into [pc_staging].[dbo].[dim_product] (pc_make, pc_model, storage_type, storage_capacity, ram)
 select distinct pc_make, pc_model, storage_type, storage_capacity, ram 
@@ -71,7 +74,8 @@ create table [pc_staging].[dbo].[dim_location](
 	[location_id] int identity(1,1) primary key,
 	[continent] [nvarchar](50) NOT NULL,
 	[country_or_state] [nvarchar](50) NOT NULL,
-	[province_or_city] [nvarchar](100) NOT NULL
+	[province_or_city] [nvarchar](100) NOT NULL,
+	[load_date] datetime default getdate()
 )
 insert into [pc_staging].[dbo].[dim_location] (continent, country_or_state, province_or_city)
 select distinct continent, country_or_state, province_or_city
@@ -92,6 +96,7 @@ create table [pc_staging].[dbo].[dim_store](
 	[store_id] int identity(1,1) primary key,
 	[shop_name] [nvarchar](50) NOT NULL,
 	[shop_age] [nvarchar](50) NOT NULL,
+	[load_date] datetime default getdate()
 )
 insert into [pc_staging].[dbo].[dim_store] (shop_name, shop_age)
 select distinct shop_name, shop_age
@@ -111,6 +116,7 @@ drop table [pc_staging].[dbo].[dim_payment]
 create table [pc_staging].[dbo].[dim_payment](
 	[payment_id] int identity(1,1) primary key,
 	[Payment_Method] [nvarchar](50) NOT NULL,
+	[load_date] datetime default getdate()
 )
 insert into [pc_staging].[dbo].[dim_payment] (payment_method)
 select distinct payment_method
@@ -130,6 +136,7 @@ drop table [pc_staging].[dbo].[dim_channel]
 create table [pc_staging].[dbo].[dim_channel](
 	[channel_id] int identity(1,1) primary key,
 	[Channel] [nvarchar](50) NOT NULL,
+	[load_date] datetime default getdate()
 )
 insert into [pc_staging].[dbo].[dim_channel] (channel)
 select distinct channel
@@ -149,6 +156,7 @@ drop table [pc_staging].[dbo].[dim_priority]
 create table [pc_staging].[dbo].[dim_priority](
 	[priority_id] int identity(1,1) primary key,
 	[Priority] [nvarchar](50) NOT NULL,
+	[load_date] datetime default getdate()
 )
 insert into [pc_staging].[dbo].[dim_priority] (priority)
 select distinct priority
@@ -170,7 +178,8 @@ create table [pc_staging].[dbo].[dim_date](
 	[purchase_date] [date] NOT NULL,
 	[ship_date] [date] NULL,
 	[year] int NOT NULL,
-	[month] int NOT NULL
+	[month] int NOT NULL,
+	[load_date] datetime default getdate()
 )
 insert into [pc_staging].[dbo].[dim_date] (purchase_date, ship_date, year, month)
 select distinct purchase_date, coalesce(try_cast(ship_date as date), '9999-12-31'), 
@@ -208,7 +217,8 @@ create table [pc_staging].[dbo].[pc_sales_fact](
 	[Cost_of_Repairs] decimal(10,2) NOT NULL,
 	[Total_Sales_per_Employee] decimal(10,2) NOT NULL,
 	[PC_Market_Price] decimal(10,2) NOT NULL,
-	[Credit_Score] decimal(10,2) NOT NULL
+	[Credit_Score] decimal(10,2) NOT NULL,
+	[load_date] datetime default getdate()
 )
 
 insert into [pc_staging].[dbo].[pc_sales_fact] (customer_id, employee_id, product_id, location_id,store_id,
@@ -238,44 +248,45 @@ select
 	cast(st.pc_market_price as decimal(10,2)),
 	st.credit_score
 
-from [pc_staging].[dbo].[pc_data] st
+from [pc_staging].[dbo].[pc_data] as st
 
-inner join dim_customer c
+inner join [pc_staging].[dbo].[dim_customer] c
 	on st.customer_name = c.first_name
+	
+
+inner join [pc_staging].[dbo].[dim_employee] e
+	on st.sales_person_name = e.employee_name
+	and st.Sales_Person_Department = e.department
 	and st.Customer_Surname = c.last_name
 	and st.Customer_Contact_Number = c.contact_number
 	and st.Customer_Email_Address = c.email_address
 
-inner join dim_employee e
-	on st.sales_person_name = e.employee_name
-	and st.Sales_Person_Department = e.department
-
-inner join dim_product p
+inner join [pc_staging].[dbo]. [dim_product] p
 	on st.pc_model = p.pc_model
 	and st.pc_make = p.pc_make
 	and st.Storage_Capacity = p.storage_capacity
 	and st.Storage_Type = p.storage_type
 	and st.ram = p.ram
 
-inner join dim_location l
+inner join [pc_staging].[dbo].[dim_location] l
 	on st.Continent = l.continent
 	and st.province_or_city = l.province_or_city
 	and st.Country_or_State = l.country_or_state
 
-inner join dim_store s
+inner join [pc_staging].[dbo].[dim_store] s
 	on st.shop_name = s.shop_name
 	and st.Shop_Age = s.shop_age
 
-inner join dim_payment pm
+inner join [pc_staging].[dbo].[dim_payment] pm
 	on st.payment_method = pm.payment_method
 
-inner join  dim_channel ch
+inner join [pc_staging].[dbo].[dim_channel] ch
 	on st.channel = ch.channel
 
-inner join dim_priority pr
+inner join [pc_staging].[dbo].[dim_priority] pr
 	on st.priority = pr.priority
 
-inner join dim_date d
+inner join [pc_staging].[dbo].[dim_date] d
 	on st.purchase_date = d.purchase_date
 	and  coalesce(try_cast(st.ship_date as date), '9999-12-31') = d.ship_date;
 
@@ -364,7 +375,7 @@ having count (*) > 1;
 		select count (*) as row_numbers
 		from [pc_staging].[dbo].[pc_data] st
 
-		inner join dim_customer c
+		inner join [pc_staging].[dbo].[dim_customer] c
 			on st.customer_name = c.first_name
 			and st.Customer_Surname = c.last_name
 			and st.Customer_Contact_Number = c.contact_number
@@ -374,13 +385,13 @@ having count (*) > 1;
 	select count (*) as row_numbers
 		from [pc_staging].[dbo].[pc_data] st
 
-		inner join dim_customer c
+		inner join [pc_staging].[dbo]. [dim_customer] c
 			on st.customer_name = c.first_name
 			and st.Customer_Surname = c.last_name
 			and st.Customer_Contact_Number = c.contact_number
 			and st.Customer_Email_Address = c.email_address
 
-		inner join dim_employee e
+		inner join [pc_staging].[dbo].[dim_employee] e
 			on st.sales_person_name = e.employee_name
 			and st.Sales_Person_Department = e.department
 
@@ -388,17 +399,17 @@ having count (*) > 1;
 	select count (*) as row_numbers
 		from [pc_staging].[dbo].[pc_data] st
 
-		inner join dim_customer c
+		inner join [pc_staging].[dbo].[dim_customer] c
 			on st.customer_name = c.first_name
 			and st.Customer_Surname = c.last_name
 			and st.Customer_Contact_Number = c.contact_number
 			and st.Customer_Email_Address = c.email_address
 
-		inner join dim_employee e
+		inner join [pc_staging].[dbo].[dim_employee] e
 			on st.sales_person_name = e.employee_name
 			and st.Sales_Person_Department = e.department
 
-		inner join dim_product p
+		inner join [pc_staging].[dbo].[dim_product] p
 			on st.pc_model = p.pc_model
 			and st.pc_make = p.pc_make
 			and st.Storage_Capacity = p.storage_capacity
@@ -409,23 +420,24 @@ having count (*) > 1;
 	select count (*) as row_numbers
 		from [pc_staging].[dbo].[pc_data] st
 
-		inner join dim_customer c
+		inner join [pc_staging].[dbo].[dim_customer] c
 			on st.customer_name = c.first_name
 			and st.Customer_Surname = c.last_name
 			and st.Customer_Contact_Number = c.contact_number
 			and st.Customer_Email_Address = c.email_address
 
-		inner join dim_employee e
+		inner join [pc_staging].[dbo].[dim_employee] e
 			on st.sales_person_name = e.employee_name
 			and st.Sales_Person_Department = e.department
 
-		inner join dim_product p
+		inner join [pc_staging].[dbo].[dim_product] p
 			on st.pc_model = p.pc_model
 			and st.pc_make = p.pc_make
 			and st.Storage_Capacity = p.storage_capacity
 			and st.Storage_Type = p.storage_type
 			and st.ram = p.ram
-		inner join dim_location l
+
+		inner join [pc_staging].[dbo].[dim_location] l
 			on st.Continent = l.continent
 			and st.province_or_city = l.province_or_city
 			and st.Country_or_State = l.country_or_state
@@ -434,29 +446,29 @@ having count (*) > 1;
 	select count (*) as row_numbers
 		from [pc_staging].[dbo].[pc_data] st
 
-		inner join dim_customer c
+		inner join [pc_staging].[dbo].[dim_customer] c
 			on st.customer_name = c.first_name
 			and st.Customer_Surname = c.last_name
 			and st.Customer_Contact_Number = c.contact_number
 			and st.Customer_Email_Address = c.email_address
 
-		inner join dim_employee e
+		inner join [pc_staging].[dbo].[dim_employee] e
 			on st.sales_person_name = e.employee_name
 			and st.Sales_Person_Department = e.department
 
-		inner join dim_product p
+		inner join [pc_staging].[dbo].[dim_product] p
 			on st.pc_model = p.pc_model
 			and st.pc_make = p.pc_make
 			and st.Storage_Capacity = p.storage_capacity
 			and st.Storage_Type = p.storage_type
 			and st.ram = p.ram
 
-		inner join dim_location l
+		inner join [pc_staging].[dbo].[dim_location] l
 			on st.Continent = l.continent
 			and st.province_or_city = l.province_or_city
 			and st.Country_or_State = l.country_or_state
 
-		inner join dim_store s
+		inner join [pc_staging].[dbo].[dim_store] s
 			on st.shop_name = s.shop_name
 			and st.Shop_Age = s.shop_age
 
@@ -464,149 +476,149 @@ having count (*) > 1;
 	select count (*) as row_numbers
 		from [pc_staging].[dbo].[pc_data] st
 
-		inner join dim_customer c
+		inner join [pc_staging].[dbo].[dim_customer] c
 			on st.customer_name = c.first_name
 			and st.Customer_Surname = c.last_name
 			and st.Customer_Contact_Number = c.contact_number
 			and st.Customer_Email_Address = c.email_address
 
-		inner join dim_employee e
+		inner join [pc_staging].[dbo].[dim_employee] e
 			on st.sales_person_name = e.employee_name
 			and st.Sales_Person_Department = e.department
 
-		inner join dim_product p
+		inner join [pc_staging].[dbo].[dim_product] p
 			on st.pc_model = p.pc_model
 			and st.pc_make = p.pc_make
 			and st.Storage_Capacity = p.storage_capacity
 			and st.Storage_Type = p.storage_type
 			and st.ram = p.ram
 
-		inner join dim_location l
+		inner join [pc_staging].[dbo].[dim_location] l
 			on st.Continent = l.continent
 			and st.province_or_city = l.province_or_city
 			and st.Country_or_State = l.country_or_state
 
-		inner join dim_store s
+		inner join [pc_staging].[dbo].[dim_store] s
 			on st.shop_name = s.shop_name
 			and st.Shop_Age = s.shop_age
 
-		inner join dim_payment pm
+		inner join [pc_staging].[dbo].[dim_payment] pm
 			on st.payment_method = pm.payment_method
 
 	-- + dim_channel
 	select count (*) as row_numbers
 		from [pc_staging].[dbo].[pc_data] st
 
-		inner join dim_customer c
+			inner join [pc_staging].[dbo].[dim_customer] c
 			on st.customer_name = c.first_name
 			and st.Customer_Surname = c.last_name
 			and st.Customer_Contact_Number = c.contact_number
 			and st.Customer_Email_Address = c.email_address
 
-		inner join dim_employee e
+		inner join [pc_staging].[dbo].[dim_employee] e
 			on st.sales_person_name = e.employee_name
 			and st.Sales_Person_Department = e.department
 
-		inner join dim_product p
+		inner join [pc_staging].[dbo].[dim_product] p
 			on st.pc_model = p.pc_model
 			and st.pc_make = p.pc_make
 			and st.Storage_Capacity = p.storage_capacity
 			and st.Storage_Type = p.storage_type
 			and st.ram = p.ram
 
-		inner join dim_location l
+		inner join [pc_staging].[dbo].[dim_location] l
 			on st.Continent = l.continent
 			and st.province_or_city = l.province_or_city
 			and st.Country_or_State = l.country_or_state
 
-		inner join dim_store s
+		inner join [pc_staging].[dbo].[dim_store] s
 			on st.shop_name = s.shop_name
 			and st.Shop_Age = s.shop_age
 
-		inner join dim_payment pm
+		inner join [pc_staging].[dbo].[dim_payment] pm
 			on st.payment_method = pm.payment_method
 
-		inner join  dim_channel ch
+		inner join [pc_staging].[dbo].[dim_channel] ch
 			on st.channel = ch.channel
 
 	-- + dim_priority
 	select count (*) as row_numbers
 		from [pc_staging].[dbo].[pc_data] st
 
-		inner join dim_customer c
+			inner join [pc_staging].[dbo].[dim_customer] c
 			on st.customer_name = c.first_name
 			and st.Customer_Surname = c.last_name
 			and st.Customer_Contact_Number = c.contact_number
 			and st.Customer_Email_Address = c.email_address
 
-		inner join dim_employee e
+		inner join [pc_staging].[dbo].[dim_employee] e
 			on st.sales_person_name = e.employee_name
 			and st.Sales_Person_Department = e.department
 
-		inner join dim_product p
+		inner join [pc_staging].[dbo].[dim_product] p
 			on st.pc_model = p.pc_model
 			and st.pc_make = p.pc_make
 			and st.Storage_Capacity = p.storage_capacity
 			and st.Storage_Type = p.storage_type
 			and st.ram = p.ram
 
-		inner join dim_location l
+		inner join [pc_staging].[dbo].[dim_location] l
 			on st.Continent = l.continent
 			and st.province_or_city = l.province_or_city
 			and st.Country_or_State = l.country_or_state
 
-		inner join dim_store s
+		inner join [pc_staging].[dbo].[dim_store] s
 			on st.shop_name = s.shop_name
 			and st.Shop_Age = s.shop_age
 
-		inner join dim_payment pm
+		inner join [pc_staging].[dbo].[dim_payment] pm
 			on st.payment_method = pm.payment_method
 
-		inner join  dim_channel ch
+		inner join [pc_staging].[dbo].[dim_channel] ch
 			on st.channel = ch.channel
 
-		inner join dim_priority pr
+		inner join [pc_staging].[dbo].[dim_priority] pr
 			on st.priority = pr.priority
 
 	-- + dim_date
 	select count (*) as row_numbers
 		from [pc_staging].[dbo].[pc_data] st
 
-		inner join dim_customer c
+			inner join [pc_staging].[dbo].[dim_customer] c
 			on st.customer_name = c.first_name
 			and st.Customer_Surname = c.last_name
 			and st.Customer_Contact_Number = c.contact_number
 			and st.Customer_Email_Address = c.email_address
 
-		inner join dim_employee e
+		inner join [pc_staging].[dbo].[dim_employee] e
 			on st.sales_person_name = e.employee_name
 			and st.Sales_Person_Department = e.department
 
-		inner join dim_product p
+		inner join [pc_staging].[dbo].[dim_product] p
 			on st.pc_model = p.pc_model
 			and st.pc_make = p.pc_make
 			and st.Storage_Capacity = p.storage_capacity
 			and st.Storage_Type = p.storage_type
 			and st.ram = p.ram
 
-		inner join dim_location l
+		inner join [pc_staging].[dbo].[dim_location] l
 			on st.Continent = l.continent
 			and st.province_or_city = l.province_or_city
 			and st.Country_or_State = l.country_or_state
 
-		inner join dim_store s
+		inner join [pc_staging].[dbo].[dim_store] s
 			on st.shop_name = s.shop_name
 			and st.Shop_Age = s.shop_age
 
-		inner join dim_payment pm
+		inner join [pc_staging].[dbo].[dim_payment] pm
 			on st.payment_method = pm.payment_method
 
-		inner join  dim_channel ch
+		inner join [pc_staging].[dbo].[dim_channel] ch
 			on st.channel = ch.channel
 
-		inner join dim_priority pr
+		inner join [pc_staging].[dbo].[dim_priority] pr
 			on st.priority = pr.priority
 
-		inner join dim_date d
+		inner join [pc_staging].[dbo].[dim_date] d
 			on st.purchase_date = d.purchase_date
 			and  coalesce(try_cast(st.ship_date as date), '9999-12-31') = d.ship_date;
