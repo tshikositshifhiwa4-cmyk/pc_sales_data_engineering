@@ -44,7 +44,7 @@ SQL Server (SSMS) & compatible with Snowflake.**
 pc-sales-data warehouse/
 │
 ├──  creating_databases/
-│   └──create_databases.csv
+│   └──create_databases.sql
 │
 ├──  raw_files/
 │   └──pc_data.csv
