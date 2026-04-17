@@ -10,7 +10,7 @@ GROUP BY  first_name
          ,last_name
          ,contact_number
          ,email_address
-HAVING COUNT(*) > 1;
+HAVING COUNT(*) > 2;
 --dim_employee
 
 SELECT  employee_name
