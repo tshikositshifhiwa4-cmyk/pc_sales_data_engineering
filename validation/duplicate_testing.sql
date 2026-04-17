@@ -1,4 +1,5 @@
---checking dimension tables duplicates --dim_customer
+--checking dimension tables duplicates
+--dim_customer
 SELECT  first_name
        ,last_name
        ,contact_number
@@ -9,7 +10,8 @@ GROUP BY  first_name
          ,last_name
          ,contact_number
          ,email_address
-HAVING COUNT(*) > 1; --dim_employee
+HAVING COUNT(*) > 1;
+--dim_employee
 
 SELECT  employee_name
        ,department
@@ -17,7 +19,8 @@ SELECT  employee_name
 FROM [pc_staging].[dbo].[dim_employee]
 GROUP BY  employee_name
          ,department
-HAVING count (*) > 1; --dim_product
+HAVING count (*) > 1; 
+--dim_product
 
 SELECT  pc_make
        ,pc_model
@@ -31,7 +34,8 @@ GROUP BY  pc_make
          ,storage_type
          ,storage_capacity
          ,ram
-HAVING count (*) > 1; --dim_location
+HAVING count (*) > 1;
+--dim_location
 
 SELECT  continent
        ,country_or_state
@@ -41,7 +45,8 @@ FROM [pc_staging].[dbo].[dim_location]
 GROUP BY  continent
          ,country_or_state
          ,province_or_city
-HAVING count (*) > 1; --dim_store
+HAVING count (*) > 1; 
+--dim_store
 
 SELECT  shop_name
        ,shop_age
@@ -49,25 +54,29 @@ SELECT  shop_name
 FROM [pc_staging].[dbo].[dim_store]
 GROUP BY  shop_name
          ,shop_age
-HAVING count (*) > 1; --dim_payment
+HAVING count (*) > 1; 
+--dim_payment
 
 SELECT  payment_method
        ,count (*) AS duplicates
 FROM [pc_staging].[dbo].[dim_payment]
 GROUP BY  payment_method
-HAVING count (*) > 1; --dim_channel
+HAVING count (*) > 1; 
+--dim_channel
 
 SELECT  channel
        ,count (*) AS duplicates
 FROM [pc_staging].[dbo].[dim_channel]
 GROUP BY  channel
-HAVING count (*) > 1; --dim_priority
+HAVING count (*) > 1; 
+--dim_priority
 
 SELECT  priority
        ,count (*) AS duplicates
 FROM [pc_staging].[dbo].[dim_priority]
 GROUP BY  priority
-HAVING count (*) > 1; --dim_date
+HAVING count (*) > 1; 
+--dim_date
 
 SELECT  purchase_date
        ,ship_date
@@ -79,7 +88,8 @@ GROUP BY  purchase_date
          ,ship_date
          ,year
          ,month
-HAVING count (*) > 1; --pc_sales_fact
+HAVING count (*) > 1; 
+--pc_sales_fact
 
 SELECT  sale_price
        ,cost_price
