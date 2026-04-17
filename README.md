@@ -269,3 +269,11 @@ gantt
 **Built with patience, SQL, and a lot of row count checks** 
 
 </div>
+
+---
+
+<div align="center">
+  
+[Acknowledgement](https://acknowledgments.netlify.app)
+
+</div>
