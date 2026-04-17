@@ -1,63 +1,102 @@
---checking dimension tables duplicates
+--checking dimension tables duplicates --dim_customer
+SELECT  first_name
+       ,last_name
+       ,contact_number
+       ,email_address
+       ,count (*) AS duplicates
+FROM [pc_staging].[dbo].[dim_customer]
+GROUP BY  first_name
+         ,last_name
+         ,contact_number
+         ,email_address
+HAVING COUNT(*) > 1; --dim_employee
 
-	--dim_customer
-select first_name, last_name, contact_number, email_address, count (*) as duplicates
-from [pc_staging].[dbo].[dim_customer]
-group by first_name, last_name, contact_number, email_address
-having count(*) >1;
+SELECT  employee_name
+       ,department
+       ,count (*) AS duplicates
+FROM [pc_staging].[dbo].[dim_employee]
+GROUP BY  employee_name
+         ,department
+HAVING count (*) > 1; --dim_product
 
-	--dim_employee
-select employee_name, department, count (*) as duplicates
-from [pc_staging].[dbo].[dim_employee]
-group by employee_name, department
-having count (*) > 1;
+SELECT  pc_make
+       ,pc_model
+       ,storage_type
+       ,storage_capacity
+       ,ram
+       ,count (*) AS duplicates
+FROM [pc_staging].[dbo].[dim_product]
+GROUP BY  pc_make
+         ,pc_model
+         ,storage_type
+         ,storage_capacity
+         ,ram
+HAVING count (*) > 1; --dim_location
 
-	--dim_product
-select pc_make, pc_model, storage_type, storage_capacity, ram, count (*) as duplicates
-from [pc_staging].[dbo].[dim_product]
-group by pc_make, pc_model, storage_type, storage_capacity, ram
-having count (*) > 1;
+SELECT  continent
+       ,country_or_state
+       ,province_or_city
+       ,count (*) AS duplicates
+FROM [pc_staging].[dbo].[dim_location]
+GROUP BY  continent
+         ,country_or_state
+         ,province_or_city
+HAVING count (*) > 1; --dim_store
 
-	--dim_location
-select continent, country_or_state, province_or_city, count (*) as duplicates
-from [pc_staging].[dbo].[dim_location]
-group by continent, country_or_state, province_or_city
-having count (*) > 1;
+SELECT  shop_name
+       ,shop_age
+       ,count (*) AS duplicates
+FROM [pc_staging].[dbo].[dim_store]
+GROUP BY  shop_name
+         ,shop_age
+HAVING count (*) > 1; --dim_payment
 
-	--dim_store
-select shop_name, shop_age, count (*) as duplicates
-from [pc_staging].[dbo].[dim_store]
-group by shop_name, shop_age
-having count (*) > 1;
+SELECT  payment_method
+       ,count (*) AS duplicates
+FROM [pc_staging].[dbo].[dim_payment]
+GROUP BY  payment_method
+HAVING count (*) > 1; --dim_channel
 
-	--dim_payment
-select payment_method, count (*) as duplicates
-from [pc_staging].[dbo].[dim_payment]
-group by payment_method
-having count (*) > 1;
+SELECT  channel
+       ,count (*) AS duplicates
+FROM [pc_staging].[dbo].[dim_channel]
+GROUP BY  channel
+HAVING count (*) > 1; --dim_priority
 
-	--dim_channel
-select channel, count (*) as duplicates
-from [pc_staging].[dbo].[dim_channel]
-group by channel
-having count (*) > 1;
+SELECT  priority
+       ,count (*) AS duplicates
+FROM [pc_staging].[dbo].[dim_priority]
+GROUP BY  priority
+HAVING count (*) > 1; --dim_date
 
-	--dim_priority
-select priority, count (*) as duplicates
-from [pc_staging].[dbo].[dim_priority]
-group by priority
-having count (*) > 1;
+SELECT  purchase_date
+       ,ship_date
+       ,year
+       ,month
+       ,count (*) AS duplicates
+FROM [pc_staging].[dbo].[dim_date]
+GROUP BY  purchase_date
+         ,ship_date
+         ,year
+         ,month
+HAVING count (*) > 1; --pc_sales_fact
 
-	--dim_date
-select purchase_date, ship_date, year, month, count (*) as duplicates
-from [pc_staging].[dbo].[dim_date]
-group by purchase_date, ship_date, year, month
-having count (*) > 1;
-
-	--pc_sales_fact
-select sale_price, cost_price, discount_amount, finance_amount, cost_of_repairs,
-		total_sales_per_employee, pc_market_price, credit_score, count (*) as duplicates
-from [pc_staging].[dbo].[pc_sales_fact]
-group by sale_price, cost_price, discount_amount, finance_amount,cost_of_repairs,
-		total_sales_per_employee, pc_market_price, credit_score
-having count (*) > 1;
+SELECT  sale_price
+       ,cost_price
+       ,discount_amount
+       ,finance_amount
+       ,cost_of_repairs
+       ,total_sales_per_employee
+       ,pc_market_price
+       ,credit_score
+       ,count (*) AS duplicates
+FROM [pc_staging].[dbo].[pc_sales_fact]
+GROUP BY  sale_price
+         ,cost_price
+         ,discount_amount
+         ,finance_amount
+         ,cost_of_repairs
+         ,total_sales_per_employee
+         ,pc_market_price
+         ,credit_score
+HAVING count (*) > 1;
