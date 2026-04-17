@@ -363,9 +363,7 @@ GROUP BY  sale_price
          ,credit_score
 HAVING count (*) > 1;
 --------------------------------------------------------------------------------------------------------------
---validating
-
-JOIN explosion
+--validating JOIN explosion
  --checking tables that duplicate/drop the rows
 SELECT  count (*) AS row_numbers
 FROM [pc_staging].[dbo].[pc_data]; -- + dim_customer
