@@ -2,6 +2,7 @@
 CREATE OR ALTER PROCEDURE sp_load_pc_sales_fact
 AS
 BEGIN
+    TRUNCATE TABLE [pc_staging].[dbo].[dim_product];
     INSERT INTO [pc_staging].[dbo].[pc_sales_fact]
     (
         customer_id, employee_id, product_id, location_id,

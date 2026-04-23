@@ -4,6 +4,7 @@
 CREATE OR ALTER PROCEDURE sp_load_dim_customer
 AS
 BEGIN
+    TRUNCATE TABLE [pc_staging].[dbo].[dim_product];
     INSERT INTO [pc_staging].[dbo].[dim_customer]
     (first_name, last_name, contact_number, email_address)
     SELECT DISTINCT
@@ -19,6 +20,7 @@ GO
 CREATE OR ALTER PROCEDURE sp_load_dim_employee
 AS
 BEGIN
+    TRUNCATE TABLE [pc_staging].[dbo].[dim_product];
     INSERT INTO [pc_staging].[dbo].[dim_employee]
     (employee_name, department)
     SELECT DISTINCT
@@ -32,6 +34,7 @@ GO
 CREATE OR ALTER PROCEDURE sp_load_dim_product
 AS
 BEGIN
+    TRUNCATE TABLE [pc_staging].[dbo].[dim_product];
     INSERT INTO [pc_staging].[dbo].[dim_product]
     (pc_make, pc_model, storage_type, storage_capacity, ram)
     SELECT DISTINCT
@@ -48,6 +51,7 @@ GO
 CREATE OR ALTER PROCEDURE sp_load_dim_location
 AS
 BEGIN
+    TRUNCATE TABLE [pc_staging].[dbo].[dim_product];
     INSERT INTO [pc_staging].[dbo].[dim_location]
     (continent, country_or_state, province_or_city)
     SELECT DISTINCT
@@ -62,6 +66,7 @@ GO
 CREATE OR ALTER PROCEDURE sp_load_dim_store
 AS
 BEGIN
+    TRUNCATE TABLE [pc_staging].[dbo].[dim_product];
     INSERT INTO [pc_staging].[dbo].[dim_store]
     (shop_name, shop_age)
     SELECT DISTINCT
@@ -75,6 +80,7 @@ GO
 CREATE OR ALTER PROCEDURE sp_load_dim_payment
 AS
 BEGIN
+    TRUNCATE TABLE [pc_staging].[dbo].[dim_product];
     INSERT INTO [pc_staging].[dbo].[dim_payment]
     (payment_method)
     SELECT DISTINCT
@@ -87,6 +93,7 @@ GO
 CREATE OR ALTER PROCEDURE sp_load_dim_channel
 AS
 BEGIN
+    TRUNCATE TABLE [pc_staging].[dbo].[dim_product];
     INSERT INTO [pc_staging].[dbo].[dim_channel]
     (channel)
     SELECT DISTINCT
@@ -99,6 +106,7 @@ GO
 CREATE OR ALTER PROCEDURE sp_load_dim_priority
 AS
 BEGIN
+    TRUNCATE TABLE [pc_staging].[dbo].[dim_product];
     INSERT INTO [pc_staging].[dbo].[dim_priority]
     (priority)
     SELECT DISTINCT
@@ -111,6 +119,7 @@ GO
 CREATE OR ALTER PROCEDURE sp_load_dim_date
 AS
 BEGIN
+    TRUNCATE TABLE [pc_staging].[dbo].[dim_product];
     INSERT INTO [pc_staging].[dbo].[dim_date]
     (purchase_date, ship_date, year, month)
     SELECT DISTINCT
@@ -126,6 +135,7 @@ GO
 CREATE OR ALTER PROCEDURE sp_load_pc_sales_fact
 AS
 BEGIN
+    TRUNCATE TABLE [pc_staging].[dbo].[dim_product];
     INSERT INTO [pc_staging].[dbo].[pc_sales_fact]
     (
         customer_id, employee_id, product_id, location_id,
@@ -200,4 +210,3 @@ EXEC sp_load_dim_date;
 
 EXEC sp_load_pc_sales_fact;
 GO
-

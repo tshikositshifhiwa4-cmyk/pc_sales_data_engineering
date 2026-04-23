@@ -2,6 +2,7 @@
 CREATE OR ALTER PROCEDURE sp_load_dim_date
 AS
 BEGIN
+    TRUNCATE TABLE [pc_staging].[dbo].[dim_product];
     INSERT INTO [pc_staging].[dbo].[dim_date]
     (purchase_date, ship_date, year, month)
     SELECT DISTINCT
